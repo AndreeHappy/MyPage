@@ -44,7 +44,7 @@ export default function App() {
             <KoiLagoon isLightMode={isLightMode}>
               <About isLightMode={isLightMode} />
             </KoiLagoon>
-            <Experience />
+            <Experience isLightMode={isLightMode} />
             {/* Shared 3D Koi Lagoon spanning behind both Skills and the Final Contact Section */}
             <KoiLagoon isLightMode={isLightMode}>
               <Skills isLightMode={isLightMode} />

@@ -150,6 +150,31 @@ function rotate3D(pt, rx, ry, rz) {
   return [x3, y3, z];
 }
 
+function polyArea2D(pts) {
+  let area = 0;
+  const n = pts.length;
+  for (let i = 0; i < n; i++) {
+    const p1 = pts[i];
+    const p2 = pts[(i + 1) % n];
+    area += p1.sx * p2.sy - p2.sx * p1.sy;
+  }
+  return area / 2;
+}
+
+function computeQuadNormal(p0, p1, p2) {
+  const ax = p1.wx - p0.wx;
+  const ay = p1.wy - p0.wy;
+  const az = p1.wz - p0.wz;
+  const bx = p2.wx - p0.wx;
+  const by = p2.wy - p0.wy;
+  const bz = p2.wz - p0.wz;
+  const nx = ay * bz - az * by;
+  const ny = az * bx - ax * bz;
+  const nz = ax * by - ay * bx;
+  const len = Math.hypot(nx, ny, nz) || 1;
+  return [nx / len, ny / len, nz / len];
+}
+
 // Render the 4 solid 3D letters "A", "A", "S", "A" in a vertical cascade with continuous 3D spin
 function drawSolid3DLetters(canvas, progress, timeSec = 0) {
   if (!canvas) return;
@@ -178,22 +203,28 @@ function drawSolid3DLetters(canvas, progress, timeSec = 0) {
   else if (progress > 0.88) alpha = (0.985 - progress) / 0.105;
   ctx.globalAlpha = Math.max(0, Math.min(1, alpha));
 
+  const isLight = document.documentElement.classList.contains("theme-light");
+
+  // Larger chunky letters with balanced vertical spacing
   const letters = [
-    { char: "A", baseX: -24, offsetY: -255, phase: 0.0, spinDir: 1 },
-    { char: "A", baseX: 24, offsetY: -85, phase: 1.4, spinDir: -1 },
-    { char: "S", baseX: -24, offsetY: 85, phase: 2.8, spinDir: 1 },
-    { char: "A", baseX: 24, offsetY: 255, phase: 4.2, spinDir: -1 }
+    { char: "A", baseX: -30, offsetY: -330, phase: 0.0, spinDir: 1 },
+    { char: "A", baseX: 30, offsetY: -110, phase: 1.4, spinDir: -1 },
+    { char: "S", baseX: -30, offsetY: 110, phase: 2.8, spinDir: 1 },
+    { char: "A", baseX: 30, offsetY: 330, phase: 4.2, spinDir: -1 }
   ];
 
   const fov = 1100;
   const cx = width / 2;
   const cy = height / 2;
-  const scaleXY = 60;
-  const halfDepth = 24;
+  const scaleXY = 108; // Significantly larger (was 60)
+  const halfDepth = 38; // Chunky solid 3D block extrusion (was 24)
 
   const groupY = -680 + progress * 1360;
+  const lightDir = [-0.32, -0.62, 0.71];
 
-  const letterDrawJobs = letters.map((item) => {
+  const allPolys = [];
+
+  letters.forEach((item) => {
     const posY =
       groupY + item.offsetY + Math.sin(timeSec * 1.4 + item.phase) * 8;
     const posX =
@@ -209,122 +240,161 @@ function drawSolid3DLetters(canvas, progress, timeSec = 0) {
 
     const geom = LETTER_GEOMETRY[item.char];
 
-    const projectRing = (ring2D, zLocal) =>
-      ring2D.map(([vx, vy]) => {
-        const [rxPt, ryPt, rzPt] = rotate3D(
-          [vx * scaleXY, vy * scaleXY, zLocal],
-          rx,
-          ry,
-          rz
-        );
-        const wx = rxPt + posX;
-        const wy = ryPt + posY;
-        const wz = rzPt + posZ;
-        const persp = fov / (fov - wz);
-        return {
-          sx: cx + wx * persp,
-          sy: cy + wy * persp,
-          wz
-        };
+    const projectPoint = (vx, vy, zLocal) => {
+      const [rxPt, ryPt, rzPt] = rotate3D(
+        [vx * scaleXY, vy * scaleXY, zLocal],
+        rx,
+        ry,
+        rz
+      );
+      const wx = rxPt + posX;
+      const wy = ryPt + posY;
+      const wz = rzPt + posZ;
+      const persp = fov / (fov - wz);
+      return {
+        sx: cx + wx * persp,
+        sy: cy + wy * persp,
+        wx,
+        wy,
+        wz
+      };
+    };
+
+    const frontOuter = geom.outer.map(([vx, vy]) => projectPoint(vx, vy, halfDepth));
+    const backOuter = geom.outer.map(([vx, vy]) => projectPoint(vx, vy, -halfDepth));
+    const frontHoles = geom.holes.map((hole) =>
+      hole.map(([vx, vy]) => projectPoint(vx, vy, halfDepth))
+    );
+    const backHoles = geom.holes.map((hole) =>
+      hole.map(([vx, vy]) => projectPoint(vx, vy, -halfDepth))
+    );
+
+    // Front Cap (Visible when facing camera)
+    if (polyArea2D(frontOuter) > 0) {
+      const norm = rotate3D([0, 0, 1], rx, ry, rz);
+      const dot = Math.max(0, norm[0] * lightDir[0] + norm[1] * lightDir[1] + norm[2] * lightDir[2]);
+      const avgZ = frontOuter.reduce((acc, p) => acc + p.wz, 0) / frontOuter.length;
+      allPolys.push({
+        isCap: true,
+        outer: frontOuter,
+        holes: frontHoles,
+        avgZ,
+        diffuse: 0.45 + 0.55 * dot
       });
+    }
 
-    const frontOuter = projectRing(geom.outer, halfDepth);
-    const backOuter = projectRing(geom.outer, -halfDepth);
-    const frontHoles = geom.holes.map((h) => projectRing(h, halfDepth));
-    const backHoles = geom.holes.map((h) => projectRing(h, -halfDepth));
+    // Back Cap (Also a face of the letter, reversed winding for outward normal)
+    const backOuterRev = [...backOuter].reverse();
+    if (polyArea2D(backOuterRev) > 0) {
+      const norm = rotate3D([0, 0, -1], rx, ry, rz);
+      const dot = Math.max(0, norm[0] * lightDir[0] + norm[1] * lightDir[1] + norm[2] * lightDir[2]);
+      const avgZ = backOuter.reduce((acc, p) => acc + p.wz, 0) / backOuter.length;
+      const backHolesRev = backHoles.map((h) => [...h].reverse());
+      allPolys.push({
+        isCap: true,
+        outer: backOuterRev,
+        holes: backHolesRev,
+        avgZ,
+        diffuse: 0.45 + 0.55 * dot
+      });
+    }
 
-    const sideQuads = [];
-    const addSideQuads = (fPts, bPts) => {
-      const n = fPts.length;
-      for (let i = 0; i < n; i++) {
-        const next = (i + 1) % n;
-        const p0 = fPts[i];
-        const p1 = fPts[next];
-        const p2 = bPts[next];
-        const p3 = bPts[i];
-        const avgZ = (p0.wz + p1.wz + p2.wz + p3.wz) / 4;
-        sideQuads.push({ pts: [p0, p1, p2, p3], avgZ });
+    // Outer Side Quads (Extrusion facets)
+    const n = geom.outer.length;
+    for (let i = 0; i < n; i++) {
+      const next = (i + 1) % n;
+      const quad = [frontOuter[i], frontOuter[next], backOuter[next], backOuter[i]];
+      if (polyArea2D(quad) > 0) {
+        const norm = computeQuadNormal(quad[0], quad[1], quad[2]);
+        const dot = Math.max(0, norm[0] * lightDir[0] + norm[1] * lightDir[1] + norm[2] * lightDir[2]);
+        const avgZ = (quad[0].wz + quad[1].wz + quad[2].wz + quad[3].wz) / 4;
+        allPolys.push({
+          isCap: false,
+          pts: quad,
+          avgZ,
+          diffuse: 0.45 + 0.55 * dot
+        });
       }
-    };
+    }
 
-    addSideQuads(frontOuter, backOuter);
-    frontHoles.forEach((fHole, hIdx) => addSideQuads(fHole, backHoles[hIdx]));
-
-    sideQuads.sort((a, b) => a.avgZ - b.avgZ);
-
-    const calcCenterZ = (pts) =>
-      pts.reduce((acc, p) => acc + p.wz, 0) / pts.length;
-    const frontZ = calcCenterZ(frontOuter);
-    const backZ = calcCenterZ(backOuter);
-
-    const isNearFront = frontZ > backZ;
-    const nearCap = {
-      outer: isNearFront ? frontOuter : backOuter,
-      holes: isNearFront ? frontHoles : backHoles,
-      avgZ: isNearFront ? frontZ : backZ,
-      isFrontFace: isNearFront
-    };
-    const farCap = {
-      outer: isNearFront ? backOuter : frontOuter,
-      holes: isNearFront ? backHoles : frontHoles,
-      avgZ: isNearFront ? backZ : frontZ,
-      isFrontFace: !isNearFront
-    };
-
-    return {
-      avgZ: (frontZ + backZ) / 2,
-      nearCap,
-      farCap,
-      sideQuads
-    };
+    // Inner Hole Side Quads (Inner depth of A)
+    frontHoles.forEach((fHole, hIdx) => {
+      const bHole = backHoles[hIdx];
+      const nh = fHole.length;
+      for (let i = 0; i < nh; i++) {
+        const next = (i + 1) % nh;
+        const quad = [fHole[next], fHole[i], bHole[i], bHole[next]];
+        if (polyArea2D(quad) > 0) {
+          const norm = computeQuadNormal(quad[0], quad[1], quad[2]);
+          const dot = Math.max(0, norm[0] * lightDir[0] + norm[1] * lightDir[1] + norm[2] * lightDir[2]);
+          const avgZ = (quad[0].wz + quad[1].wz + quad[2].wz + quad[3].wz) / 4;
+          allPolys.push({
+            isCap: false,
+            pts: quad,
+            avgZ,
+            diffuse: 0.45 + 0.55 * dot
+          });
+        }
+      }
+    });
   });
 
-  letterDrawJobs.sort((a, b) => a.avgZ - b.avgZ);
+  // Strict Painter's Algorithm: draw furthest polygons first
+  allPolys.sort((a, b) => a.avgZ - b.avgZ);
 
-  const drawCap = (cap) => {
-    ctx.beginPath();
-    ctx.moveTo(cap.outer[0].sx, cap.outer[0].sy);
-    for (let i = 1; i < cap.outer.length; i++) {
-      ctx.lineTo(cap.outer[i].sx, cap.outer[i].sy);
-    }
-    ctx.closePath();
-
-    cap.holes.forEach((hole) => {
-      ctx.moveTo(hole[0].sx, hole[0].sy);
-      for (let i = 1; i < hole.length; i++) {
-        ctx.lineTo(hole[i].sx, hole[i].sy);
-      }
-      ctx.closePath();
-    });
-
-    ctx.fillStyle = cap.isFrontFace ? "#E3DAC9" : "#080808";
-    ctx.fill("evenodd");
-
-    ctx.lineWidth = cap.isFrontFace ? 2.2 : 1.2;
-    ctx.lineJoin = "round";
-    ctx.strokeStyle = "#080808";
-    ctx.stroke();
-  };
-
-  letterDrawJobs.forEach((job) => {
-    drawCap(job.farCap);
-
-    job.sideQuads.forEach((quad) => {
+  allPolys.forEach((p) => {
+    const { diffuse } = p;
+    if (p.isCap) {
+      // Main Letter Face (Bright, solid, high contrast)
       ctx.beginPath();
-      ctx.moveTo(quad.pts[0].sx, quad.pts[0].sy);
-      for (let i = 1; i < quad.pts.length; i++) {
-        ctx.lineTo(quad.pts[i].sx, quad.pts[i].sy);
+      ctx.moveTo(p.outer[0].sx, p.outer[0].sy);
+      for (let i = 1; i < p.outer.length; i++) {
+        ctx.lineTo(p.outer[i].sx, p.outer[i].sy);
       }
       ctx.closePath();
-      ctx.fillStyle = "#080808";
-      ctx.fill();
-      ctx.lineWidth = 1.4;
-      ctx.lineJoin = "round";
-      ctx.strokeStyle = "rgba(227, 218, 201, 0.38)";
-      ctx.stroke();
-    });
 
-    drawCap(job.nearCap);
+      p.holes.forEach((hole) => {
+        ctx.moveTo(hole[0].sx, hole[0].sy);
+        for (let i = 1; i < hole.length; i++) {
+          ctx.lineTo(hole[i].sx, hole[i].sy);
+        }
+        ctx.closePath();
+      });
+
+      if (isLight) {
+        ctx.fillStyle = `rgb(${Math.round(245 + 10 * diffuse)}, ${Math.round(245 + 10 * diffuse)}, ${Math.round(245 + 10 * diffuse)})`;
+        ctx.strokeStyle = "#101012";
+      } else {
+        ctx.fillStyle = `rgb(${Math.round(210 + 35 * diffuse)}, ${Math.round(200 + 35 * diffuse)}, ${Math.round(185 + 35 * diffuse)})`;
+        ctx.strokeStyle = "#080808";
+      }
+
+      ctx.fill("evenodd");
+      ctx.lineWidth = 3.2;
+      ctx.lineJoin = "round";
+      ctx.stroke();
+    } else {
+      // Side Quad (3D Depth extrusion facet with lighting)
+      ctx.beginPath();
+      ctx.moveTo(p.pts[0].sx, p.pts[0].sy);
+      for (let i = 1; i < p.pts.length; i++) {
+        ctx.lineTo(p.pts[i].sx, p.pts[i].sy);
+      }
+      ctx.closePath();
+
+      if (isLight) {
+        ctx.fillStyle = `rgb(${Math.round(24 + 38 * diffuse)}, ${Math.round(24 + 38 * diffuse)}, ${Math.round(28 + 42 * diffuse)})`;
+        ctx.strokeStyle = "#101012";
+      } else {
+        ctx.fillStyle = `rgb(${Math.round(16 + 32 * diffuse)}, ${Math.round(16 + 32 * diffuse)}, ${Math.round(20 + 36 * diffuse)})`;
+        ctx.strokeStyle = "#080808";
+      }
+
+      ctx.fill();
+      ctx.lineWidth = 1.8;
+      ctx.lineJoin = "round";
+      ctx.stroke();
+    }
   });
 
   ctx.restore();
