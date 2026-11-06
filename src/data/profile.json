@@ -1,0 +1,120 @@
+{
+  "name": "Andree Aarom Sosa Ardiles",
+  "title": "Ingeniero de Sistemas e Informatica",
+  "location": "Ilo, Peru",
+  "email": "aaromsosa03@gmail.com",
+  "phone": "914242325",
+  "address": "Pmv. IX Villa 06 de Mayo L-10, Ilo, Peru - 18601",
+  "photo": "/images/photo_home.webp",
+  "cvFile": "/CV_ANDREE_SOSA.pdf",
+  "social": {
+    "linkedin": "https://www.linkedin.com/in/andree-sosa0103",
+    "github": "https://github.com/AndreeHappy",
+    "facebook": "https://www.facebook.com/andreeaaromsosa",
+    "youtube": "https://www.youtube.com/@andreesosa6839",
+    "orcid": "https://orcid.org/0009-0006-0163-0540",
+    "instagram": "https://www.instagram.com/andree.happyss/"
+  },
+  "summary": "Ingeniero de Sistemas e Informatica con experiencia en soporte TI, monitoreo de equipos y administracion basica de usuarios en Active Directory, ademas de desarrollo web institucional y automatizacion de reportes en Excel. Manejo avanzado de Microsoft Excel y conocimientos en SQL, Power BI y Python orientados a analisis y mejora de procesos. Me adapto rapido a entornos dinamicos y trabajo en equipo cumpliendo plazos.",
+  "education": [
+    {
+      "institution": "Universidad Nacional de Moquegua (UNAM)",
+      "location": "Ilo, Peru",
+      "degree": "Ingenieria de Sistemas e Informatica",
+      "period": "Abr 2020 - Dic 2024",
+      "extra": "Bachiller en Ingenieria de Sistemas e Informatica - 22 Sep 2025"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Oficina Descentralizada de Procesos Electorales (ODPE)",
+      "location": "Ilo, Moquegua, Peru",
+      "role": "Operador de Centro de Computo - Segunda Eleccion Presidencial",
+      "period": "May 2026 - Jun 2026",
+      "bullets": [
+        "Procese y registre actas electorales mediante escaneo y digitacion, garantizando la exactitud en el ingreso de la informacion.",
+        "Ejecute el control de calidad, validando la correspondencia entre las actas fisicas, su version digital y los datos en el sistema.",
+        "Resolvi inconsistencias y participe en las pruebas operativas del sistema informatico, asegurando la transparencia y fluidez del escrutinio."
+      ]
+    },
+    {
+      "company": "Oficina Descentralizada de Procesos Electorales (ODPE)",
+      "location": "Ilo, Moquegua, Peru",
+      "role": "Operador de Centro de Computo - Elecciones Generales",
+      "period": "Mar 2026 - Abr 2026",
+      "bullets": [
+        "Digitalice y registre actas electorales mediante escaneo y digitacion, asegurando precision en el ingreso de datos.",
+        "Realice control de calidad, verificando la concordancia entre actas fisicas, digitalizadas y datos ingresados.",
+        "Gestione inconsistencias y participe en pruebas operativas del sistema, garantizando la confiabilidad del proceso electoral."
+      ]
+    },
+    {
+      "company": "Universidad Nacional de Moquegua (UNAM)",
+      "location": "Ilo, Moquegua, Peru",
+      "role": "Soporte TI",
+      "period": "Jun 2025 - Jul 2025",
+      "bullets": [
+        "Monitoree equipos de computo para asegurar su uso optimo y continuidad de servicio en areas administrativas.",
+        "Gestione la creacion de usuarios y permisos en dominio institucional, apoyando el control de acceso y la administracion de cuentas.",
+        "Realice mantenimiento preventivo logico y actualice informacion tecnica de inventario, mejorando el orden y el seguimiento."
+      ]
+    },
+    {
+      "company": "Sociedad Beneficencia de Moquegua",
+      "location": "Moquegua, Peru",
+      "role": "Desarrollador Web",
+      "period": "Feb 2025 - May 2025",
+      "bullets": [
+        "Desarrolle la pagina web institucional, mejorando la comunicacion y el acceso a informacion para usuarios internos y externos.",
+        "Implemente y di mantenimiento a componentes del sitio en coordinacion con el equipo, asegurando continuidad operativa y cumplimiento de plazos.",
+        "Optimice la gestion y publicacion de contenidos para el personal administrativo, estandarizando el flujo de actualizacion."
+      ]
+    },
+    {
+      "company": "Asociacion de Vivienda y Taller La Independencia",
+      "location": "Ilo, Moquegua, Peru",
+      "role": "Encargado de Oficina / Especialista en Ofimatica",
+      "period": "Ene 2025 - Abr 2025",
+      "bullets": [
+        "Automatizacion de reportes de deudas mediante macros (Excel VBA), reduciendo el tiempo de elaboracion y minimizando errores de digitacion.",
+        "Optimizacion y estandarizacion de plantillas de control (pagos, morosidad, estados de cuenta) para la administracion de terrenos.",
+        "Redaccion de documentos administrativos (oficios, solicitudes, comunicados y actas) para tramites internos y coordinacion con miembros de la asociacion.",
+        "Gestion basica de archivo y organizacion documental en oficina para agilizar busquedas y seguimiento de casos."
+      ]
+    },
+    {
+      "company": "Consultoría TI & Automatización",
+      "location": "Ilo, Moquegua, Peru",
+      "role": "Consultor TI & Automatización de Procesos Freelance",
+      "period": "Jul 2024 - Dic 2024",
+      "bullets": [
+        "Desarrollo de scripts de análisis y tratamiento de datos con Python, OpenCV y bibliotecas de Machine Learning.",
+        "Diseño de modelos analíticos y tableros interactivos en Power BI integrando bases de datos SQL.",
+        "Implementación de automatizaciones administrativas para optimizar el rendimiento y la precisión de procesos clave."
+      ]
+    }
+  ],
+  "skills": {
+    "technical": ["Excel Avanzado (Macros/VBA)", "Power BI", "Microsoft Word", "Active Directory", "SQL"],
+    "programming": ["Python", "OpenCV", "Git", "K-Means", "PyTorch", "TensorFlow", "VS Code"],
+    "cybersecurity": ["SOC/SIEM", "Analisis de logs", "Deteccion basica", "Respuesta a incidentes"],
+    "languages": ["Espanol (Nativo)", "Ingles Avanzado (B2)"]
+  },
+  "interests": ["Automatizacion de procesos", "Analisis de datos", "Tecnologia aplicada a gestion administrativa"],
+  "leadership": [
+    {
+      "organization": "Parroquia San Jeronimo (Diocesis de Tacna y Moquegua)",
+      "role": "Catequista (Voluntariado)",
+      "period": "2024 - 2025",
+      "location": "Ilo, Moquegua, Peru",
+      "description": "Formacion y acompanamiento a jovenes; apoyo en la planificacion y ejecucion de actividades parroquiales."
+    },
+    {
+      "organization": "Universidad Nacional de Moquegua (UNAM)",
+      "role": "Asistente - Seminario: La Innovacion para lograr la Competitividad",
+      "period": "Jun 2023",
+      "location": "Ilo, Moquegua, Peru",
+      "description": "Participacion como asistente (04 horas academicas), 22-23 de octubre."
+    }
+  ]
+}

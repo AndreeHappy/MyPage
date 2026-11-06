@@ -1,0 +1,174 @@
+@import "tailwindcss";
+
+@theme {
+  --font-title: 'Inconsolata', monospace;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-body: 'JetBrains Mono', monospace;
+  --font-sans: 'JetBrains Mono', monospace;
+}
+
+:root {
+  --bg: #080808;
+  --bg-card: #0f0f0f;
+  --bg-elevated: #161616;
+  --fg: #E3DAC9;
+  --fg-muted: rgba(227, 218, 201, 0.72);
+  --fg-subtle: rgba(227, 218, 201, 0.45);
+  --border-color: rgba(227, 218, 201, 0.22);
+  --border-strong: #E3DAC9;
+  --grid-line: rgba(227, 218, 201, 0.07);
+}
+
+html.theme-light {
+  --bg: #E3DAC9;
+  --bg-card: #dbd0bc;
+  --bg-elevated: #d1c5ae;
+  --fg: #080808;
+  --fg-muted: rgba(8, 8, 8, 0.75);
+  --fg-subtle: rgba(8, 8, 8, 0.48);
+  --border-color: rgba(8, 8, 8, 0.22);
+  --border-strong: #080808;
+  --grid-line: rgba(8, 8, 8, 0.08);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'JetBrains Mono', monospace;
+  font-optical-sizing: auto;
+  background-color: var(--bg);
+  color: var(--fg);
+  transition: background-color 0.35s ease, color 0.35s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6, .font-title {
+  font-family: 'Inconsolata', monospace;
+  font-optical-sizing: auto;
+  font-variation-settings: "wdth" 100;
+}
+
+::selection {
+  background-color: var(--fg);
+  color: var(--bg);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--fg-muted);
+}
+
+/* 100% GPU-Composited Ocean Wave & Flag Undulation for Lagoon Foreground Elements */
+@keyframes oceanFlagWaveLeft {
+  0% {
+    transform: perspective(1200px) rotateX(2.8deg) rotateY(-5.5deg) skewY(-3.2deg) translateZ(12px) rotateZ(-1.8deg);
+  }
+  25% {
+    transform: perspective(1200px) rotateX(-3.6deg) rotateY(3.2deg) skewY(2.6deg) translateZ(-14px) rotateZ(0.8deg);
+  }
+  50% {
+    transform: perspective(1200px) rotateX(4.2deg) rotateY(5.2deg) skewY(3.4deg) translateZ(18px) rotateZ(2.2deg);
+  }
+  75% {
+    transform: perspective(1200px) rotateX(-2.8deg) rotateY(-3.8deg) skewY(-2.8deg) translateZ(-10px) rotateZ(-0.6deg);
+  }
+  100% {
+    transform: perspective(1200px) rotateX(2.8deg) rotateY(-5.5deg) skewY(-3.2deg) translateZ(12px) rotateZ(-1.8deg);
+  }
+}
+
+@keyframes oceanFlagWaveRight {
+  0% {
+    transform: perspective(1200px) rotateX(-3.8deg) rotateY(5.2deg) skewY(3.4deg) translateZ(-12px) rotateZ(2.0deg);
+  }
+  25% {
+    transform: perspective(1200px) rotateX(3.2deg) rotateY(-3.6deg) skewY(-2.8deg) translateZ(16px) rotateZ(-0.8deg);
+  }
+  50% {
+    transform: perspective(1200px) rotateX(-4.2deg) rotateY(-5.5deg) skewY(-3.6deg) translateZ(-16px) rotateZ(-2.2deg);
+  }
+  75% {
+    transform: perspective(1200px) rotateX(3.5deg) rotateY(3.8deg) skewY(2.8deg) translateZ(12px) rotateZ(0.6deg);
+  }
+  100% {
+    transform: perspective(1200px) rotateX(-3.8deg) rotateY(5.2deg) skewY(3.4deg) translateZ(-12px) rotateZ(2.0deg);
+  }
+}
+
+@keyframes oceanFlagSheen {
+  0% {
+    background-position: -120% -40%;
+    opacity: 0.16;
+  }
+  50% {
+    background-position: 80% 60%;
+    opacity: 0.36;
+  }
+  100% {
+    background-position: 240% 140%;
+    opacity: 0.16;
+  }
+}
+
+@keyframes oceanSwayGentle {
+  0% {
+    transform: translate3d(-2px, -3px, 0);
+  }
+  50% {
+    transform: translate3d(2.5px, 3px, 0);
+  }
+  100% {
+    transform: translate3d(-1.5px, 2px, 0);
+  }
+}
+
+.ocean-flag-left {
+  transform-style: preserve-3d;
+  transform-origin: 30% 45%;
+  animation: oceanFlagWaveLeft 7.2s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+  will-change: transform;
+}
+
+.ocean-flag-right {
+  transform-style: preserve-3d;
+  transform-origin: 70% 55%;
+  animation: oceanFlagWaveRight 7.8s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+  will-change: transform;
+}
+
+.ocean-flag-sheen {
+  background: linear-gradient(
+    125deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.24) 30%,
+    rgba(0, 0, 0, 0.08) 52%,
+    rgba(255, 255, 255, 0.18) 72%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 250% 250%;
+  animation: oceanFlagSheen 7.4s ease-in-out infinite alternate;
+  will-change: background-position, opacity;
+}
+
+.ocean-sway-gentle {
+  animation: oceanSwayGentle 6.8s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+

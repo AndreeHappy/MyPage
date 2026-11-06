@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "title": "Google Business Intelligence - Certificado Profesional",
+    "institution": "Google / Coursera",
+    "date": "Mar 2026",
+    "file": "/documents/google-bi.pdf",
+    "type": "pdf",
+    "description": "Certificado profesional en Business Intelligence por Google.",
+    "verifyUrl": "https://coursera.org/verify/professional-cert/39KL4GWYDUVR"
+  },
+  {
+    "id": 2,
+    "title": "Google Advanced Data Analytics - Certificado Profesional",
+    "institution": "Google / Coursera",
+    "date": "Mar 2026",
+    "file": "/documents/google-advanced-data.pdf",
+    "type": "pdf",
+    "description": "Certificado profesional en Advanced Data Analytics por Google.",
+    "verifyUrl": "https://coursera.org/verify/professional-cert/WGTPB85STVX3"
+  },
+  {
+    "id": 3,
+    "title": "Ciberseguridad: CyberSOC (C|CS)",
+    "institution": "Universidad Nacional de Ingenieria (UNI)",
+    "date": "Feb 2025",
+    "file": "/documents/cybersoc.pdf",
+    "type": "pdf",
+    "description": "Certificado N 017-0007742 del Programa de Iniciacion Tecnologica PIT-2025.",
+    "verifyUrl": ""
+  },
+  {
+    "id": 4,
+    "title": "Procesamiento de Imagenes con OpenCV",
+    "institution": "Universidad Nacional de Ingenieria (UNI)",
+    "date": "Feb 2025",
+    "file": "/documents/opencv.pdf",
+    "type": "pdf",
+    "description": "Certificado N 017-0020616 del Programa de Iniciacion Tecnologica PIT-2025.",
+    "verifyUrl": ""
+  }
+]

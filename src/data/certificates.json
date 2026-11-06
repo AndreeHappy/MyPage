@@ -1,0 +1,127 @@
+[
+  {
+    "id": 1,
+    "name": "Mineria 4.0",
+    "institution": "INARQ",
+    "year": "2026",
+    "file": "/documents/mineria-4.0.pdf",
+    "type": "pdf",
+    "verifyUrl": ""
+  },
+  {
+    "id": 2,
+    "name": "Gerencia de Proyectos Mineros",
+    "institution": "INARQ",
+    "year": "2026",
+    "hours": "30 horas",
+    "file": "/documents/gerencia-proyectos-mineros.pdf",
+    "type": "pdf",
+    "verifyUrl": ""
+  },
+  {
+    "id": 3,
+    "name": "Liderazgo de Equipos de Alto Rendimiento",
+    "institution": "INARQ",
+    "year": "2026",
+    "hours": "10 horas",
+    "file": "/documents/liderazgo-equipos.pdf",
+    "type": "pdf",
+    "verifyUrl": ""
+  },
+  {
+    "id": 4,
+    "name": "Google Business Intelligence",
+    "institution": "Google / Coursera",
+    "year": "2026",
+    "file": "/documents/google-bi.pdf",
+    "type": "pdf",
+    "verifyUrl": "https://coursera.org/verify/professional-cert/39KL4GWYDUVR"
+  },
+  {
+    "id": 5,
+    "name": "Google Advanced Data Analytics",
+    "institution": "Google / Coursera",
+    "year": "2026",
+    "file": "/documents/google-advanced-data.pdf",
+    "type": "pdf",
+    "verifyUrl": "https://coursera.org/verify/professional-cert/WGTPB85STVX3"
+  },
+  {
+    "id": 6,
+    "name": "Google Data Analytics",
+    "institution": "Google / Coursera",
+    "year": "2026",
+    "file": "/documents/google-data-analytics.pdf",
+    "type": "pdf",
+    "verifyUrl": "https://coursera.org/verify/professional-cert/4L3QPUUPZ4R7"
+  },
+  {
+    "id": 7,
+    "name": "Excel Avanzado",
+    "institution": "UPC | Grupo Romero",
+    "year": "2026",
+    "hours": "10 horas",
+    "file": "/documents/excel-avanzado.pdf",
+    "type": "pdf",
+    "verifyUrl": ""
+  },
+  {
+    "id": 8,
+    "name": "Analisis de Datos con Power BI",
+    "institution": "UPC | Grupo Romero",
+    "year": "2026",
+    "hours": "3 horas",
+    "file": "/documents/power-bi.pdf",
+    "type": "pdf",
+    "verifyUrl": ""
+  },
+  {
+    "id": 9,
+    "name": "Word Intermedio",
+    "institution": "UPC | Grupo Romero",
+    "year": "2026",
+    "hours": "8 horas",
+    "file": "/documents/word-intermedio.pdf",
+    "type": "pdf",
+    "verifyUrl": ""
+  },
+  {
+    "id": 10,
+    "name": "Logística 360°: Claves para una Gestión Moderna y Eficiente",
+    "institution": "UPC | Grupo Romero",
+    "year": "2026",
+    "hours": "20 horas",
+    "file": "/documents/logistica-360.pdf",
+    "type": "pdf",
+    "verifyUrl": ""
+  },
+  {
+    "id": 11,
+    "name": "Ciberseguridad: CyberSOC (C|CS)",
+    "institution": "Universidad Nacional de Ingenieria (UNI) | CTIC",
+    "year": "2025",
+    "hours": "16 horas",
+    "file": "/documents/cybersoc.pdf",
+    "type": "pdf",
+    "verifyUrl": ""
+  },
+  {
+    "id": 12,
+    "name": "Procesamiento de Imagenes con OpenCV",
+    "institution": "Universidad Nacional de Ingenieria (UNI) | CTIC",
+    "year": "2025",
+    "hours": "16 horas",
+    "file": "/documents/opencv.pdf",
+    "type": "pdf",
+    "verifyUrl": ""
+  },
+  {
+    "id": 13,
+    "name": "Ingles Avanzado (B2)",
+    "institution": "Centro Cultural Peruano Norteamericano",
+    "year": "2019",
+    "file": "/documents/ingles-b2.pdf",
+    "type": "pdf",
+    "verifyUrl": ""
+  }
+]
