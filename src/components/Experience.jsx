@@ -205,19 +205,19 @@ function drawSolid3DLetters(canvas, progress, timeSec = 0) {
 
   const isLight = document.documentElement.classList.contains("theme-light");
 
-  // Larger chunky letters with balanced vertical spacing
+  // Proportioned letters with clean vertical spacing (scaled down to fit gracefully inside the cylinder)
   const letters = [
-    { char: "A", baseX: -30, offsetY: -330, phase: 0.0, spinDir: 1 },
-    { char: "A", baseX: 30, offsetY: -110, phase: 1.4, spinDir: -1 },
-    { char: "S", baseX: -30, offsetY: 110, phase: 2.8, spinDir: 1 },
-    { char: "A", baseX: 30, offsetY: 330, phase: 4.2, spinDir: -1 }
+    { char: "A", baseX: -20, offsetY: -260, phase: 0.0, spinDir: 1 },
+    { char: "A", baseX: 20, offsetY: -85, phase: 1.4, spinDir: -1 },
+    { char: "S", baseX: -20, offsetY: 85, phase: 2.8, spinDir: 1 },
+    { char: "A", baseX: 20, offsetY: 260, phase: 4.2, spinDir: -1 }
   ];
 
   const fov = 1100;
   const cx = width / 2;
   const cy = height / 2;
-  const scaleXY = 108; // Significantly larger (was 60)
-  const halfDepth = 38; // Chunky solid 3D block extrusion (was 24)
+  const scaleXY = 78; // Balanced size (scaled down from 108, was originally 60)
+  const halfDepth = 26; // Solid, proportional 3D extrusion thickness (was 38)
 
   const groupY = -680 + progress * 1360;
   const lightDir = [-0.32, -0.62, 0.71];
@@ -299,11 +299,11 @@ function drawSolid3DLetters(canvas, progress, timeSec = 0) {
       });
     }
 
-    // Outer Side Quads (Extrusion facets)
+    // Outer Side Quads: Correct outward winding [next, i, back_i, back_next] so facing sides never get culled
     const n = geom.outer.length;
     for (let i = 0; i < n; i++) {
       const next = (i + 1) % n;
-      const quad = [frontOuter[i], frontOuter[next], backOuter[next], backOuter[i]];
+      const quad = [frontOuter[next], frontOuter[i], backOuter[i], backOuter[next]];
       if (polyArea2D(quad) > 0) {
         const norm = computeQuadNormal(quad[0], quad[1], quad[2]);
         const dot = Math.max(0, norm[0] * lightDir[0] + norm[1] * lightDir[1] + norm[2] * lightDir[2]);
@@ -317,13 +317,13 @@ function drawSolid3DLetters(canvas, progress, timeSec = 0) {
       }
     }
 
-    // Inner Hole Side Quads (Inner depth of A)
+    // Inner Hole Side Quads: Correct outward-into-hole winding [i, next, back_next, back_i]
     frontHoles.forEach((fHole, hIdx) => {
       const bHole = backHoles[hIdx];
       const nh = fHole.length;
       for (let i = 0; i < nh; i++) {
         const next = (i + 1) % nh;
-        const quad = [fHole[next], fHole[i], bHole[i], bHole[next]];
+        const quad = [fHole[i], fHole[next], bHole[next], bHole[i]];
         if (polyArea2D(quad) > 0) {
           const norm = computeQuadNormal(quad[0], quad[1], quad[2]);
           const dot = Math.max(0, norm[0] * lightDir[0] + norm[1] * lightDir[1] + norm[2] * lightDir[2]);
