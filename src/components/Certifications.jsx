@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import {
   ArrowSquareOut,
   CheckCircle,
@@ -32,10 +33,24 @@ function getThumbnailUrl(filePath = "") {
 export default function Certifications() {
   const [activeCertModal, setActiveCertModal] = useState(null);
 
+  useEffect(() => {
+    if (!activeCertModal) return;
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") setActiveCertModal(null);
+    };
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [activeCertModal]);
+
   return (
     <section
       id="certificaciones"
-      className="relative z-10 pt-28 pb-24 transition-colors duration-300 min-h-screen"
+      className="relative pt-28 pb-24 transition-colors duration-300 min-h-screen"
       style={{
         backgroundColor: "var(--bg)",
         color: "var(--fg)"
@@ -225,78 +240,82 @@ export default function Certifications() {
         </div>
       </div>
 
-      {/* Certificate Modal Preview */}
-      <AnimatePresence>
-        {activeCertModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-8">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setActiveCertModal(null)}
-              className="absolute inset-0 bg-black/80 backdrop-blur-md"
-            />
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.94 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.94 }}
-              transition={{ duration: 0.25 }}
-              className="relative z-10 w-full max-w-5xl max-h-[92vh] flex flex-col rounded-3xl border shadow-2xl overflow-hidden"
-              style={{
-                backgroundColor: "var(--bg)",
-                borderColor: "var(--border-color)",
-                color: "var(--fg)"
-              }}
-            >
-              {/* Modal Header */}
-              <div
-                className="flex items-center justify-between px-6 py-4 border-b"
-                style={{ borderColor: "var(--border-color)" }}
-              >
-                <div className="flex flex-col">
-                  <span className="text-xs font-mono opacity-70">
-                    CERTIFICADO OFICIAL // {activeCertModal.year}
-                  </span>
-                  <h3 className="text-lg sm:text-xl font-bold font-title">
-                    {activeCertModal.name}
-                  </h3>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  {activeCertModal.file && (
-                    <a
-                      href={activeCertModal.file}
-                      download
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-mono font-bold transition-colors hover:bg-white/10"
-                      style={{ borderColor: "var(--border-color)" }}
-                    >
-                      <FilePdf size={15} />
-                      <span>Descargar PDF</span>
-                    </a>
-                  )}
-                  <button
-                    onClick={() => setActiveCertModal(null)}
-                    aria-label="Cerrar modal"
-                    className="p-2 rounded-lg cursor-pointer transition-opacity hover:opacity-70"
-                  >
-                    <X size={22} />
-                  </button>
-                </div>
-              </div>
-
-              {/* Modal Certificate Visual View */}
-              <div className="p-4 sm:p-6 overflow-y-auto flex items-center justify-center bg-black/30">
-                <img
-                  src={getThumbnailUrl(activeCertModal.file)}
-                  alt={activeCertModal.name}
-                  className="max-h-[75vh] w-auto object-contain rounded-xl shadow-2xl border border-white/10"
+      {/* Certificate Modal Preview (Portaled to body with z-[100] to prevent any sibling section overlap) */}
+      {typeof document !== "undefined" &&
+        createPortal(
+          <AnimatePresence>
+            {activeCertModal && (
+              <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 md:p-8">
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setActiveCertModal(null)}
+                  className="absolute inset-0 bg-black/85 backdrop-blur-md"
                 />
+
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.94 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.94 }}
+                  transition={{ duration: 0.25 }}
+                  className="relative z-10 w-full max-w-5xl max-h-[92vh] flex flex-col rounded-3xl border shadow-2xl overflow-hidden"
+                  style={{
+                    backgroundColor: "var(--bg)",
+                    borderColor: "var(--border-color)",
+                    color: "var(--fg)"
+                  }}
+                >
+                  {/* Modal Header */}
+                  <div
+                    className="flex items-center justify-between px-6 py-4 border-b"
+                    style={{ borderColor: "var(--border-color)" }}
+                  >
+                    <div className="flex flex-col">
+                      <span className="text-xs font-mono opacity-70">
+                        CERTIFICADO OFICIAL // {activeCertModal.year}
+                      </span>
+                      <h3 className="text-lg sm:text-xl font-bold font-title">
+                        {activeCertModal.name}
+                      </h3>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      {activeCertModal.file && (
+                        <a
+                          href={activeCertModal.file}
+                          download
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-mono font-bold transition-colors hover:bg-white/10"
+                          style={{ borderColor: "var(--border-color)" }}
+                        >
+                          <FilePdf size={15} />
+                          <span>Descargar PDF</span>
+                        </a>
+                      )}
+                      <button
+                        onClick={() => setActiveCertModal(null)}
+                        aria-label="Cerrar modal"
+                        className="p-2 rounded-lg cursor-pointer transition-opacity hover:opacity-70"
+                      >
+                        <X size={22} />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Modal Certificate Visual View */}
+                  <div className="p-4 sm:p-6 overflow-y-auto flex items-center justify-center bg-black/30">
+                    <img
+                      src={getThumbnailUrl(activeCertModal.file)}
+                      alt={activeCertModal.name}
+                      className="max-h-[75vh] w-auto object-contain rounded-xl shadow-2xl border border-white/10"
+                    />
+                  </div>
+                </motion.div>
               </div>
-            </motion.div>
-          </div>
+            )}
+          </AnimatePresence>,
+          document.body
         )}
-      </AnimatePresence>
     </section>
   );
 }

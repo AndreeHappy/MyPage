@@ -27,43 +27,12 @@
   ],
   "experience": [
     {
-      "company": "Oficina Descentralizada de Procesos Electorales (ODPE)",
-      "location": "Ilo, Moquegua, Peru",
-      "role": "Operador de Centro de Computo - Segunda Eleccion Presidencial",
-      "period": "May 2026 - Jun 2026",
-      "bullets": [
-        "Procese y registre actas electorales mediante escaneo y digitacion, garantizando la exactitud en el ingreso de la informacion.",
-        "Ejecute el control de calidad, validando la correspondencia entre las actas fisicas, su version digital y los datos en el sistema.",
-        "Resolvi inconsistencias y participe en las pruebas operativas del sistema informatico, asegurando la transparencia y fluidez del escrutinio."
-      ]
-    },
-    {
-      "company": "Oficina Descentralizada de Procesos Electorales (ODPE)",
-      "location": "Ilo, Moquegua, Peru",
-      "role": "Operador de Centro de Computo - Elecciones Generales",
-      "period": "Mar 2026 - Abr 2026",
-      "bullets": [
-        "Digitalice y registre actas electorales mediante escaneo y digitacion, asegurando precision en el ingreso de datos.",
-        "Realice control de calidad, verificando la concordancia entre actas fisicas, digitalizadas y datos ingresados.",
-        "Gestione inconsistencias y participe en pruebas operativas del sistema, garantizando la confiabilidad del proceso electoral."
-      ]
-    },
-    {
-      "company": "Universidad Nacional de Moquegua (UNAM)",
-      "location": "Ilo, Moquegua, Peru",
-      "role": "Soporte TI",
-      "period": "Jun 2025 - Jul 2025",
-      "bullets": [
-        "Monitoree equipos de computo para asegurar su uso optimo y continuidad de servicio en areas administrativas.",
-        "Gestione la creacion de usuarios y permisos en dominio institucional, apoyando el control de acceso y la administracion de cuentas.",
-        "Realice mantenimiento preventivo logico y actualice informacion tecnica de inventario, mejorando el orden y el seguimiento."
-      ]
-    },
-    {
       "company": "Sociedad Beneficencia de Moquegua",
       "location": "Moquegua, Peru",
       "role": "Desarrollador Web",
       "period": "Feb 2025 - May 2025",
+      "documentImage": "/documents/constancias/constancia-beneficencia-moquegua.webp",
+      "summary": "Desarrollo y modernización del portal web institucional, optimizando la atención ciudadana y gestión de contenidos.",
       "bullets": [
         "Desarrolle la pagina web institucional, mejorando la comunicacion y el acceso a informacion para usuarios internos y externos.",
         "Implemente y di mantenimiento a componentes del sitio en coordinacion con el equipo, asegurando continuidad operativa y cumplimiento de plazos.",
@@ -75,6 +44,8 @@
       "location": "Ilo, Moquegua, Peru",
       "role": "Encargado de Oficina / Especialista en Ofimatica",
       "period": "Ene 2025 - Abr 2025",
+      "documentImage": "/documents/constancias/constancia-asociacion-independencia.webp",
+      "summary": "Automatización de reportes de deudas con macros VBA en Excel y gestión administrativa de expedientes.",
       "bullets": [
         "Automatizacion de reportes de deudas mediante macros (Excel VBA), reduciendo el tiempo de elaboracion y minimizando errores de digitacion.",
         "Optimizacion y estandarizacion de plantillas de control (pagos, morosidad, estados de cuenta) para la administracion de terrenos.",
@@ -83,10 +54,51 @@
       ]
     },
     {
-      "company": "Consultoría TI & Automatización",
+      "company": "Universidad Nacional de Moquegua (UNAM)",
       "location": "Ilo, Moquegua, Peru",
-      "role": "Consultor TI & Automatización de Procesos Freelance",
-      "period": "Jul 2024 - Dic 2024",
+      "role": "Soporte TI",
+      "period": "Jun 2025 - Jul 2025",
+      "documentImage": "/documents/constancias/constancia_unam_soporte_ti.webp",
+      "summary": "Monitoreo preventivo de equipos de cómputo, gestión de usuarios y permisos en Active Directory.",
+      "bullets": [
+        "Monitoree equipos de computo para asegurar su uso optimo y continuidad de servicio en areas administrativas.",
+        "Gestione la creacion de usuarios y permisos en dominio institucional, apoyando el control de acceso y la administracion de cuentas.",
+        "Realice mantenimiento preventivo logico y actualice informacion tecnica de inventario, mejorando el orden y el seguimiento."
+      ]
+    },
+    {
+      "company": "Oficina Descentralizada de Procesos Electorales (ODPE / ONPE)",
+      "location": "Ilo, Moquegua, Peru",
+      "role": "Operador de Centro de Computo - Elecciones Generales",
+      "period": "Mar 2026 - Abr 2026",
+      "documentImage": "/documents/constancias/constancia-onpe-elecciones-generales.webp",
+      "summary": "Digitalización y registro de actas electorales con control de calidad y validación de consistencia.",
+      "bullets": [
+        "Digitalice y registre actas electorales mediante escaneo y digitacion, asegurando precision en el ingreso de datos.",
+        "Realice control de calidad, verificando la concordancia entre actas fisicas, digitalizadas y datos ingresados.",
+        "Gestione inconsistencias y participe en pruebas operativas del sistema, garantizando la confiabilidad del proceso electoral."
+      ]
+    },
+    {
+      "company": "Oficina Descentralizada de Procesos Electorales (ODPE / ONPE)",
+      "location": "Ilo, Moquegua, Peru",
+      "role": "Operador de Centro de Computo - Segunda Elección Presidencial",
+      "period": "May 2026 - Jun 2026",
+      "documentImage": "/documents/constancias/constancia-onpe-segunda-eleccion.webp",
+      "summary": "Control de calidad y verificación cruzada de actas digitalizadas en escrutinio electoral.",
+      "bullets": [
+        "Procese y registre actas electorales mediante escaneo y digitacion, garantizando la exactitud en el ingreso de la informacion.",
+        "Ejecute el control de calidad, validando la correspondencia entre las actas fisicas, su version digital y los datos en el sistema.",
+        "Resolvi inconsistencias y participe en las pruebas operativas del sistema informatico, asegurando la transparencia y fluidez del escrutinio."
+      ]
+    },
+    {
+      "company": "Consultoría TI & Automatización (GitHub)",
+      "location": "Ilo, Moquegua, Peru",
+      "role": "Desarrollo de Proyectos de Software & Automatización",
+      "period": "Jul 2024 - Presente",
+      "documentImage": null,
+      "summary": "Desarrollo de proyectos de código abierto, scripts de automatización con Python y tableros en Power BI.",
       "bullets": [
         "Desarrollo de scripts de análisis y tratamiento de datos con Python, OpenCV y bibliotecas de Machine Learning.",
         "Diseño de modelos analíticos y tableros interactivos en Power BI integrando bases de datos SQL.",
@@ -107,14 +119,16 @@
       "role": "Catequista (Voluntariado)",
       "period": "2024 - 2025",
       "location": "Ilo, Moquegua, Peru",
-      "description": "Formacion y acompanamiento a jovenes; apoyo en la planificacion y ejecucion de actividades parroquiales."
+      "description": "Formacion y acompanamiento a jovenes; apoyo en la planificacion y ejecucion de actividades parroquiales.",
+      "documentImage": "/documents/constancias/constancia-parroquia-san-jeronimo.webp"
     },
     {
-      "organization": "Universidad Nacional de Moquegua (UNAM)",
-      "role": "Asistente - Seminario: La Innovacion para lograr la Competitividad",
-      "period": "Jun 2023",
+      "organization": "Instituto Nacional de Estadistica e Informatica (INEI)",
+      "role": "Aplicador de la Evaluacion Nacional de Logros de Aprendizaje (ENLA 2025)",
+      "period": "11 Nov 2025 - 12 Nov 2025",
       "location": "Ilo, Moquegua, Peru",
-      "description": "Participacion como asistente (04 horas academicas), 22-23 de octubre."
+      "description": "Aplicacion y supervision de pruebas estandarizadas a estudiantes de educacion primaria.",
+      "documentImage": "/documents/constancias/constancia-inei-enla.webp"
     }
   ]
 }

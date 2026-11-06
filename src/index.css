@@ -2,9 +2,9 @@
 
 @theme {
   --font-title: 'Inconsolata', monospace;
+  --font-body: 'Montserrat', sans-serif;
+  --font-sans: 'Montserrat', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
-  --font-body: 'JetBrains Mono', monospace;
-  --font-sans: 'JetBrains Mono', monospace;
 }
 
 :root {
@@ -36,8 +36,10 @@ html {
 }
 
 body {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Montserrat', sans-serif;
   font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
   background-color: var(--bg);
   color: var(--fg);
   transition: background-color 0.35s ease, color 0.35s ease;
@@ -50,6 +52,13 @@ h1, h2, h3, h4, h5, h6, .font-title {
   font-family: 'Inconsolata', monospace;
   font-optical-sizing: auto;
   font-variation-settings: "wdth" 100;
+}
+
+.montserrat {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
 }
 
 ::selection {

@@ -26,30 +26,29 @@ function OrcidLogo({ size = 22 }) {
   );
 }
 
-export default function Footer() {
+export default function Footer({ isLightMode = false }) {
   const { name, title, email, phone, location, social } = profileData;
 
   return (
     <footer
       id="contacto"
       data-snap-section="footer"
-      className="relative z-10 min-h-[100dvh] border-t py-20 sm:py-24 flex flex-col justify-between transition-colors duration-300"
+      className="relative z-10 min-h-[100dvh] border-t pt-16 pb-10 sm:pb-12 flex flex-col justify-end transition-colors duration-300"
       style={{
         backgroundColor: "transparent",
         borderColor: "var(--border-color)",
         color: "var(--fg)"
       }}
     >
-      <div
-        className="max-w-7xl w-full mx-auto px-6 my-auto ocean-sway-gentle"
-      >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+      {/* Main Info lowered down to the bottom area right above the divider line */}
+      <div className="max-w-7xl w-full mx-auto px-6 mb-8 sm:mb-10 ocean-sway-gentle">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-end">
           <div>
-            <h2 className="text-3xl sm:text-5xl font-bold font-title mb-3">
+            <h2 className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold font-title tracking-tight mb-2 whitespace-nowrap">
               {name}
             </h2>
             <p
-              className="font-mono text-base sm:text-lg"
+              className="font-mono text-xs sm:text-sm font-medium"
               style={{ color: "var(--fg-muted)" }}
             >
               {title}
@@ -57,37 +56,36 @@ export default function Footer() {
           </div>
 
           <div className="flex flex-col md:items-end">
-            <h3 className="font-bold font-title mb-6 text-2xl">Contacto</h3>
+            <h3 className="font-bold font-title mb-4 text-xl sm:text-2xl">Contacto</h3>
             <ul
-              className="space-y-4 text-sm sm:text-base font-mono"
+              className="space-y-2.5 text-xs sm:text-sm font-mono"
               style={{ color: "var(--fg-muted)" }}
             >
               <li className="flex items-center gap-3 justify-start md:justify-end">
                 <a href={`mailto:${email}`} className="hover:underline">
                   {email}
                 </a>
-                <EnvelopeSimple size={20} />
+                <EnvelopeSimple size={18} />
               </li>
               <li className="flex items-center gap-3 justify-start md:justify-end">
                 <a href={`tel:+51${phone}`} className="hover:underline">
                   +51 {phone}
                 </a>
-                <Phone size={20} />
+                <Phone size={18} />
               </li>
               <li className="flex items-center gap-3 justify-start md:justify-end">
                 <span>{location}</span>
-                <MapPin size={20} />
+                <MapPin size={18} />
               </li>
             </ul>
           </div>
         </div>
       </div>
 
-      <div
-        className="max-w-7xl w-full mx-auto px-6 ocean-sway-gentle"
-      >
+      {/* Bottom bar with copyright, 2x2 Logo, and socials */}
+      <div className="max-w-7xl w-full mx-auto px-6 ocean-sway-gentle">
         <div
-          className="flex flex-col md:flex-row items-center justify-between pt-8 border-t gap-6"
+          className="flex flex-col md:flex-row items-center justify-between pt-6 border-t gap-6"
           style={{ borderColor: "var(--border-color)" }}
         >
           <p
@@ -98,7 +96,7 @@ export default function Footer() {
           </p>
 
           <div className="flex items-center justify-center">
-            <AASALogo scale={1.05} />
+            <AASALogo scale={0.9} isLightMode={isLightMode} />
           </div>
 
           <div className="flex items-center gap-4 flex-wrap justify-center">

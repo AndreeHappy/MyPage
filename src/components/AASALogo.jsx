@@ -1,39 +1,53 @@
 import React from "react";
 
+// Chunky geometric letters (Adumu / collegiate faceted blocky style)
 const LOGO_GEOMETRY = {
   A: {
     outer: [
-      [-0.22, -1.0],
-      [0.22, -1.0],
-      [0.86, 1.0],
-      [0.4, 1.0],
-      [0.25, 0.44],
-      [-0.25, 0.44],
-      [-0.4, 1.0],
-      [-0.86, 1.0]
+      [-0.45, -1.0],
+      [0.45, -1.0],
+      [0.77, -0.75],
+      [0.77, 1.0],
+      [0.26, 1.0],
+      [0.26, 0.40],
+      [-0.26, 0.40],
+      [-0.26, 1.0],
+      [-0.77, 1.0],
+      [-0.77, -0.75]
     ],
     holes: [
       [
-        [0.0, -0.48],
-        [0.18, 0.08],
-        [-0.18, 0.08]
+        [-0.26, -0.52],
+        [0.26, -0.52],
+        [0.26, 0.04],
+        [-0.26, 0.04]
       ]
     ]
   },
   S: {
     outer: [
-      [-0.72, -1.0],
-      [0.72, -1.0],
-      [0.72, -0.58],
-      [-0.26, -0.58],
-      [-0.26, -0.18],
-      [0.72, -0.18],
-      [0.72, 1.0],
-      [-0.72, 1.0],
-      [-0.72, 0.58],
-      [0.26, 0.58],
-      [0.26, 0.18],
-      [-0.72, 0.18]
+      [-0.48, -1.0],
+      [0.48, -1.0],
+      [0.77, -0.75],
+      [0.77, -0.33],
+      [0.10, -0.33],
+      [0.10, -0.57],
+      [-0.23, -0.57],
+      [-0.23, -0.17],
+      [0.48, -0.17],
+      [0.77, 0.08],
+      [0.77, 0.75],
+      [0.48, 1.0],
+      [-0.48, 1.0],
+      [-0.77, 0.75],
+      [-0.77, 0.33],
+      [-0.10, 0.33],
+      [-0.10, 0.57],
+      [0.23, 0.57],
+      [0.23, 0.17],
+      [-0.48, 0.17],
+      [-0.77, -0.08],
+      [-0.77, -0.75]
     ],
     holes: []
   }
@@ -63,33 +77,41 @@ function pointsToPath(pts) {
   );
 }
 
-// Flatter, tighter static "AASA" logo mark (subtle relief, compact spacing, adaptive to light/dark mode)
+// 2x2 Matrix "AASA" Chunky 3D Monogram Logo
+// Row 0: A  A
+// Row 1: S  A
 export default function AASALogo({ scale = 1, isLightMode = false }) {
-  const chars = ["A", "A", "S", "A"];
-  const width = 124;
-  const height = 38;
+  const items = [
+    { char: "A", row: 0, col: 0 },
+    { char: "A", row: 0, col: 1 },
+    { char: "S", row: 1, col: 0 },
+    { char: "A", row: 1, col: 1 }
+  ];
+
+  const width = 56;
+  const height = 58;
   const cx = width / 2;
-  const cy = height / 2 + 1;
-  const scaleXY = 12.5;
-  const halfDepth = 2.0; // Subtle, flatter relief (not overly 3D)
-  const fov = 700;
+  const cy = height / 2;
+  const scaleXY = 11.5;
+  const halfDepth = 1.6;
+  const fov = 600;
 
   // Adaptive palette
   const faceFill = isLightMode ? "#080808" : "#E3DAC9";
   const edgeStroke = isLightMode ? "#E3DAC9" : "#080808";
-  const depthFill = isLightMode ? "#2a2a2a" : "#080808";
+  const depthFill = isLightMode ? "#d5cbb5" : "#1a1a1a";
+  const backFill = isLightMode ? "#c4b89f" : "#080808";
 
-  // Nearly front-facing with a subtle architectural relief angle
-  const rx = -0.08;
+  // Isometric angle with subtle architectural relief
+  const rx = -0.09;
   const ry = 0.12;
   const rz = 0;
 
-  const jobs = chars.map((char, idx) => {
-    // Tighter horizontal kerning (22.5px spacing between letter centers)
-    const posX = (idx - 1.5) * 22.5;
-    const posY = 0;
-    const posZ = 0;
-    const geom = LOGO_GEOMETRY[char];
+  const jobs = items.map((item, idx) => {
+    // Tight 2x2 grid spacing
+    const posX = (item.col - 0.5) * (scaleXY * 1.82);
+    const posY = (item.row - 0.5) * (scaleXY * 2.16);
+    const geom = LOGO_GEOMETRY[item.char];
 
     const projectRing = (ring2D, zLocal) =>
       ring2D.map(([vx, vy]) => {
@@ -101,7 +123,7 @@ export default function AASALogo({ scale = 1, isLightMode = false }) {
         );
         const wx = rxPt + posX;
         const wy = ryPt + posY;
-        const wz = rzPt + posZ;
+        const wz = rzPt;
         const persp = fov / (fov - wz);
         return {
           sx: cx + wx * persp,
@@ -139,7 +161,7 @@ export default function AASALogo({ scale = 1, isLightMode = false }) {
       [pointsToPath(outer), ...holes.map(pointsToPath)].join(" ");
 
     return {
-      key: `${char}-${idx}`,
+      key: `${item.char}-${idx}`,
       farCapPath: capToPath(backOuter, backHoles),
       nearCapPath: capToPath(frontOuter, frontHoles),
       sideQuads
@@ -151,35 +173,38 @@ export default function AASALogo({ scale = 1, isLightMode = false }) {
       width={width * scale}
       height={height * scale}
       viewBox={`0 0 ${width} ${height}`}
-      aria-label="AASA Logo"
+      aria-label="AASA Monogram Logo"
       className="pointer-events-none select-none overflow-visible"
     >
       {jobs.map((job) => (
         <g key={job.key}>
+          {/* 3D Back Cap */}
           <path
             d={job.farCapPath}
-            fill={depthFill}
+            fill={backFill}
             fillRule="evenodd"
-            stroke={depthFill}
-            strokeWidth="1.1"
+            stroke={backFill}
+            strokeWidth="0.8"
             strokeLinejoin="round"
           />
+          {/* 3D Extruded Sides */}
           {job.sideQuads.map((q, qIdx) => (
             <path
               key={qIdx}
               d={q.d}
               fill={depthFill}
-              stroke={depthFill}
-              strokeWidth="0.6"
+              stroke={edgeStroke}
+              strokeWidth="0.5"
               strokeLinejoin="round"
             />
           ))}
+          {/* Front Face with Contrasting Border */}
           <path
             d={job.nearCapPath}
             fill={faceFill}
             fillRule="evenodd"
             stroke={edgeStroke}
-            strokeWidth="1.35"
+            strokeWidth="1.2"
             strokeLinejoin="round"
           />
         </g>

@@ -59,7 +59,7 @@ export default function Hero({ isLightMode = false }) {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.12 }}
-          className="mt-2 text-[11px] sm:text-xs md:text-sm font-light tracking-wider"
+          className="mt-2 text-xs sm:text-sm md:text-base font-medium tracking-wide"
           style={{
             color: isLightMode ? "rgba(8, 8, 8, 0.88)" : "rgba(227, 218, 201, 0.95)",
             textShadow: isLightMode
