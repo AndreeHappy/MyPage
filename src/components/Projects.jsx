@@ -33,7 +33,7 @@ const projectsList = [
   }
 ];
 
-function ProjectVideoCard({ project, isHovered, isDimmed, onHover, onLeave }) {
+function ProjectVideoCard({ project, isHovered, isDimmed, onHover, onLeave, onToggle }) {
   const videoRef = useRef(null);
 
   useEffect(() => {
@@ -48,6 +48,7 @@ function ProjectVideoCard({ project, isHovered, isDimmed, onHover, onLeave }) {
 
   return (
     <div
+      onClick={onToggle}
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
       className={`group relative rounded-2xl sm:rounded-3xl border overflow-hidden transition-all duration-500 cursor-pointer ${
@@ -117,6 +118,9 @@ export default function Projects() {
               isDimmed={hoveredId !== null && hoveredId !== project.id}
               onHover={() => setHoveredId(project.id)}
               onLeave={() => setHoveredId(null)}
+              onToggle={() =>
+                setHoveredId((prev) => (prev === project.id ? null : project.id))
+              }
             />
           ))}
         </div>

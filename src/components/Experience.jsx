@@ -775,7 +775,7 @@ export default function Experience() {
     <section
       id="experiencia"
       ref={sectionRef}
-      className="relative w-full h-screen border-t overflow-hidden flex items-center justify-center"
+      className="relative w-full min-h-screen md:h-screen border-t overflow-hidden md:overflow-hidden flex items-center justify-center py-14 md:py-0"
       style={{
         backgroundColor: "var(--bg)",
         borderColor: "var(--border-color)",
@@ -863,8 +863,17 @@ export default function Experience() {
         </button>
       </div>
 
-      {/* Mobile Fallback: Paired Experience Cards */}
-      <div className="md:hidden relative z-20 w-full max-w-lg mx-auto grid grid-cols-1 gap-5 px-4 py-12 overflow-y-auto max-h-screen">
+      {/* Mobile Fallback: Natural document scrolling with clear section title */}
+      <div className="md:hidden relative z-20 w-full max-w-lg mx-auto flex flex-col gap-6 px-4">
+        <div className="mb-1">
+          <span className="text-xs font-mono tracking-widest uppercase opacity-60">
+            02 // TRAYECTORIA
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-bold font-title mt-1">
+            Experiencia Profesional
+          </h2>
+        </div>
+
         {experiencesList.map((item, idx) => (
           <div
             key={idx}
@@ -917,7 +926,7 @@ export default function Experience() {
                   exit={{ opacity: 0, scale: 0.92, y: 20 }}
                   transition={{ type: "spring", damping: 26, stiffness: 240 }}
                   onClick={(e) => e.stopPropagation()}
-                  className="relative w-full max-w-5xl border-2 rounded-[32px] overflow-hidden shadow-2xl my-auto grid grid-cols-1 lg:grid-cols-2"
+                  className="relative w-full max-w-5xl max-h-[92dvh] overflow-y-auto border-2 rounded-[28px] sm:rounded-[32px] shadow-2xl my-auto grid grid-cols-1 lg:grid-cols-2"
                   style={{
                     backgroundColor: "var(--bg)",
                 borderColor: "var(--border-strong)",
