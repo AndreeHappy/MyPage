@@ -193,14 +193,18 @@ function drawSolid3DLetters(canvas, progress, timeSec = 0) {
   ctx.scale(dpr, dpr);
   ctx.clearRect(0, 0, width, height);
 
-  if (progress <= 0.015 || progress >= 0.985) {
+  if (progress < 0.28 || progress > 0.72) {
     ctx.restore();
     return;
   }
 
+  // Smooth fade in (0.28 -> 0.36) and fade out (0.64 -> 0.72)
   let alpha = 1;
-  if (progress < 0.12) alpha = (progress - 0.015) / 0.105;
-  else if (progress > 0.88) alpha = (0.985 - progress) / 0.105;
+  if (progress < 0.36) {
+    alpha = (progress - 0.28) / 0.08;
+  } else if (progress > 0.64) {
+    alpha = (0.72 - progress) / 0.08;
+  }
   ctx.globalAlpha = Math.max(0, Math.min(1, alpha));
 
   const isLight = document.documentElement.classList.contains("theme-light");
@@ -219,7 +223,9 @@ function drawSolid3DLetters(canvas, progress, timeSec = 0) {
   const scaleXY = 78; // Balanced size (scaled down from 108, was originally 60)
   const halfDepth = 26; // Solid, proportional 3D extrusion thickness (was 38)
 
-  const groupY = -680 + progress * 1360;
+  // Normalized transition progress across Phase 2 [0.28, 0.72]
+  const transProgress = (progress - 0.28) / 0.44;
+  const groupY = -720 + transProgress * 1440;
   const lightDir = [-0.32, -0.62, 0.71];
 
   const allPolys = [];
@@ -676,21 +682,23 @@ export default function Experience() {
 
       mm.add("(min-width: 0px)", () => {
         const isMobileScreen = window.innerWidth < 768;
-        const travelY = isMobileScreen ? 760 : 1080;
         const scrollDist = isMobileScreen ? "+=2400" : "+=3600";
+        const travelDistance = 2600;
 
         gsap.set(r1, {
           y: 0,
           z: 0,
           rotationX: 0,
-          rotationY: 0
+          rotationY: 0,
+          autoAlpha: 1
         });
 
         gsap.set(r2, {
-          y: travelY,
+          y: travelDistance,
           z: 0,
           rotationX: 0,
-          rotationY: 120
+          rotationY: 120,
+          autoAlpha: 0
         });
 
         let targetProgress = 0;
@@ -740,7 +748,7 @@ export default function Experience() {
           }
         });
 
-        // PHASE 1 (0 -> 1.2): Ring 1 rotates clockwise
+        // PHASE 1 (0 -> 1.2): Ring 1 rotates clockwise in place
         tl.to(
           r1,
           {
@@ -751,12 +759,13 @@ export default function Experience() {
           0
         );
 
-        // PHASE 2 (1.2 -> 2.4): Ring 1 rises up, solid 3D "A A S A" letters tumble through the center, Ring 2 rises from below
+        // PHASE 2 (1.2 -> 2.4): Ring 1 rises up & fades out, Ring 2 rises from below & fades in
         tl.to(
           r1,
           {
-            y: -travelY,
+            y: -travelDistance,
             rotationY: -300,
+            autoAlpha: 0,
             ease: "none",
             duration: 1.2
           },
@@ -768,13 +777,14 @@ export default function Experience() {
           {
             y: 0,
             rotationY: 0,
+            autoAlpha: 1,
             ease: "none",
             duration: 1.2
           },
           1.2
         );
 
-        // PHASE 3 (2.4 -> 3.6): Ring 2 rotates clockwise in center
+        // PHASE 3 (2.4 -> 3.6): Ring 2 rotates clockwise in place
         tl.to(
           r2,
           {
@@ -849,16 +859,6 @@ export default function Experience() {
         }}
       />
 
-      {/* Subtle Floating Section Header (Visible on Desktop & Mobile) */}
-      <div className="absolute top-5 sm:top-7 left-6 sm:left-10 z-30 pointer-events-none select-none">
-        <span className="text-[10px] sm:text-xs font-mono uppercase tracking-widest opacity-60">
-          02 // TRAYECTORIA
-        </span>
-        <h2 className="text-base sm:text-2xl font-bold font-title mt-0.5">
-          Experiencia Profesional
-        </h2>
-      </div>
-
       {/* Unified Responsive 3D Scene (Desktop, Mobile & Zoom) */}
       <div
         onTouchStart={handleTouchStart}
@@ -926,13 +926,6 @@ export default function Experience() {
         >
           <CaretRight size={20} weight="bold" />
         </button>
-
-        {/* Mobile Swipe / Tap Helper Pill */}
-        <div className="md:hidden absolute bottom-5 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
-          <span className="px-3 py-1 rounded-full text-[10px] font-mono border backdrop-blur-md opacity-70 bg-[var(--bg)]/85 border-[var(--border-color)]">
-            Desliza ← → o toca una tarjeta
-          </span>
-        </div>
       </div>
 
       {/* Animated Fusion Modal View (Left Card: Detailed Info + Right Card: Constancia / Evidencia) */}
