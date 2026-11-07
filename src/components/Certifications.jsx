@@ -245,21 +245,17 @@ export default function Certifications() {
         createPortal(
           <AnimatePresence>
             {activeCertModal && (
-              <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 md:p-8">
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  onClick={() => setActiveCertModal(null)}
-                  className="absolute inset-0 bg-black/85 backdrop-blur-md"
-                />
-
+              <div
+                onClick={() => setActiveCertModal(null)}
+                className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 bg-black/90 backdrop-blur-md overflow-y-auto"
+              >
                 <motion.div
                   initial={{ opacity: 0, scale: 0.94 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.94 }}
-                  transition={{ duration: 0.25 }}
-                  className="relative z-10 w-full max-w-5xl max-h-[92vh] flex flex-col rounded-3xl border shadow-2xl overflow-hidden"
+                  transition={{ duration: 0.22 }}
+                  onClick={(e) => e.stopPropagation()}
+                  className="relative w-full max-w-5xl max-h-[92vh] flex flex-col rounded-2xl sm:rounded-3xl border shadow-2xl overflow-hidden my-auto"
                   style={{
                     backgroundColor: "var(--bg)",
                     borderColor: "var(--border-color)",
@@ -268,19 +264,19 @@ export default function Certifications() {
                 >
                   {/* Modal Header */}
                   <div
-                    className="flex items-center justify-between px-6 py-4 border-b"
+                    className="flex items-center justify-between px-5 sm:px-6 py-3.5 sm:py-4 border-b"
                     style={{ borderColor: "var(--border-color)" }}
                   >
-                    <div className="flex flex-col">
-                      <span className="text-xs font-mono opacity-70">
+                    <div className="flex flex-col pr-4">
+                      <span className="text-[11px] sm:text-xs font-mono opacity-70">
                         CERTIFICADO OFICIAL // {activeCertModal.year}
                       </span>
-                      <h3 className="text-lg sm:text-xl font-bold font-title">
+                      <h3 className="text-base sm:text-xl font-bold font-title line-clamp-1">
                         {activeCertModal.name}
                       </h3>
                     </div>
 
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
                       {activeCertModal.file && (
                         <a
                           href={activeCertModal.file}
@@ -289,25 +285,26 @@ export default function Certifications() {
                           style={{ borderColor: "var(--border-color)" }}
                         >
                           <FilePdf size={15} />
-                          <span>Descargar PDF</span>
+                          <span className="hidden sm:inline">Descargar PDF</span>
+                          <span className="sm:hidden">PDF</span>
                         </a>
                       )}
                       <button
                         onClick={() => setActiveCertModal(null)}
                         aria-label="Cerrar modal"
-                        className="p-2 rounded-lg cursor-pointer transition-opacity hover:opacity-70"
+                        className="p-1.5 sm:p-2 rounded-lg cursor-pointer transition-opacity hover:opacity-70 border border-transparent hover:border-white/10"
                       >
-                        <X size={22} />
+                        <X size={20} />
                       </button>
                     </div>
                   </div>
 
                   {/* Modal Certificate Visual View */}
-                  <div className="p-4 sm:p-6 overflow-y-auto flex items-center justify-center bg-black/30">
+                  <div className="p-3 sm:p-6 overflow-y-auto flex items-center justify-center bg-black/30">
                     <img
                       src={getThumbnailUrl(activeCertModal.file)}
                       alt={activeCertModal.name}
-                      className="max-h-[75vh] w-auto object-contain rounded-xl shadow-2xl border border-white/10"
+                      className="max-h-[min(66vh,540px)] w-auto object-contain rounded-xl shadow-2xl border border-white/10"
                     />
                   </div>
                 </motion.div>

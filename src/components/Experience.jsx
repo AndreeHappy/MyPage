@@ -617,7 +617,38 @@ export default function Experience() {
   const ring2InnerRef = useRef(null);
   const canvas3DRef = useRef(null);
   const manualAngleRef = useRef(0);
+  const touchStartX = useRef(null);
+  const touchStartY = useRef(null);
   const [selectedExp, setSelectedExp] = useState(null);
+
+  // Track viewport dimensions to gracefully adapt cylinder scale on zoom (133%, 25%) and mobile
+  const [viewport, setViewport] = useState({
+    width: typeof window !== "undefined" ? window.innerWidth : 1440,
+    height: typeof window !== "undefined" ? window.innerHeight : 900
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setViewport({ width: window.innerWidth, height: window.innerHeight });
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const isMobile = viewport.width < 768;
+
+  // Responsive scale:
+  // - On mobile: target front card width ~70-75% of screen width [230px, 285px]
+  // - On desktop: scale so cards never clip top/bottom on 133%+ zoom, nor get lost at 25% zoom
+  const scale = isMobile
+    ? Math.min(Math.max(viewport.width * 0.72, 230), 285) / 460
+    : Math.min(
+        Math.max(
+          Math.min((viewport.height * 0.63) / 610, (viewport.width * 0.72) / 1380),
+          0.62
+        ),
+        1.35
+      );
 
   useEffect(() => {
     if (!selectedExp) return;
@@ -643,7 +674,11 @@ export default function Experience() {
 
       const mm = gsap.matchMedia();
 
-      mm.add("(min-width: 768px)", () => {
+      mm.add("(min-width: 0px)", () => {
+        const isMobileScreen = window.innerWidth < 768;
+        const travelY = isMobileScreen ? 760 : 1080;
+        const scrollDist = isMobileScreen ? "+=2400" : "+=3600";
+
         gsap.set(r1, {
           y: 0,
           z: 0,
@@ -652,7 +687,7 @@ export default function Experience() {
         });
 
         gsap.set(r2, {
-          y: 1080,
+          y: travelY,
           z: 0,
           rotationX: 0,
           rotationY: 120
@@ -693,7 +728,7 @@ export default function Experience() {
           scrollTrigger: {
             trigger: sectionEl,
             start: "top top",
-            end: "+=3600",
+            end: scrollDist,
             pin: true,
             pinSpacing: true,
             scrub: 1.0,
@@ -720,7 +755,7 @@ export default function Experience() {
         tl.to(
           r1,
           {
-            y: -1080,
+            y: -travelY,
             rotationY: -300,
             ease: "none",
             duration: 1.2
@@ -771,11 +806,31 @@ export default function Experience() {
     });
   };
 
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    const diffX = e.changedTouches[0].clientX - touchStartX.current;
+    const diffY = e.changedTouches[0].clientY - touchStartY.current;
+    if (Math.abs(diffX) > 42 && Math.abs(diffX) > Math.abs(diffY)) {
+      if (diffX < 0) {
+        rotateCylinderHorizontally(1);
+      } else {
+        rotateCylinderHorizontally(-1);
+      }
+    }
+    touchStartX.current = null;
+    touchStartY.current = null;
+  };
+
   return (
     <section
       id="experiencia"
       ref={sectionRef}
-      className="relative w-full min-h-screen md:h-screen border-t overflow-hidden md:overflow-hidden flex items-center justify-center py-14 md:py-0"
+      className="relative w-full h-[100dvh] border-t overflow-hidden flex items-center justify-center"
       style={{
         backgroundColor: "var(--bg)",
         borderColor: "var(--border-color)",
@@ -794,19 +849,31 @@ export default function Experience() {
         }}
       />
 
-      {/* Desktop Unified 3D Scene */}
+      {/* Subtle Floating Section Header (Visible on Desktop & Mobile) */}
+      <div className="absolute top-5 sm:top-7 left-6 sm:left-10 z-30 pointer-events-none select-none">
+        <span className="text-[10px] sm:text-xs font-mono uppercase tracking-widest opacity-60">
+          02 // TRAYECTORIA
+        </span>
+        <h2 className="text-base sm:text-2xl font-bold font-title mt-0.5">
+          Experiencia Profesional
+        </h2>
+      </div>
+
+      {/* Unified Responsive 3D Scene (Desktop, Mobile & Zoom) */}
       <div
-        className="hidden md:flex relative w-full h-full items-center justify-center"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        className="relative w-full h-full flex items-center justify-center overflow-hidden touch-pan-y"
         style={{
-          perspective: "2400px",
+          perspective: `${Math.round(isMobile ? 1250 : 2400 * Math.max(scale, 0.7))}px`,
           perspectiveOrigin: "50% 50%"
         }}
       >
         <div
-          className="relative w-0 h-0"
+          className="relative w-0 h-0 will-change-transform"
           style={{
             transformStyle: "preserve-3d",
-            transform: "translateZ(-420px)"
+            transform: `scale3d(${scale}, ${scale}, ${scale}) translateZ(${isMobile ? -260 : -420}px)`
           }}
         >
           {/* Ring 1 (Experiences 1, 2, 3: Text + Image pairs) */}
@@ -839,9 +906,8 @@ export default function Experience() {
         <button
           onClick={() => rotateCylinderHorizontally(-1)}
           aria-label="Girar cilindro a la izquierda"
-          className="absolute left-6 z-40 w-12 h-12 rounded-full border flex items-center justify-center cursor-pointer transition-transform hover:scale-110 active:scale-95"
+          className="absolute left-3 sm:left-6 z-40 w-10 h-10 sm:w-12 sm:h-12 rounded-full border flex items-center justify-center cursor-pointer transition-transform hover:scale-110 active:scale-95 shadow-lg bg-[var(--bg)]/90 backdrop-blur-sm"
           style={{
-            backgroundColor: "var(--bg)",
             borderColor: "var(--border-strong)",
             color: "var(--fg)"
           }}
@@ -852,63 +918,21 @@ export default function Experience() {
         <button
           onClick={() => rotateCylinderHorizontally(1)}
           aria-label="Girar cilindro a la derecha"
-          className="absolute right-6 z-40 w-12 h-12 rounded-full border flex items-center justify-center cursor-pointer transition-transform hover:scale-110 active:scale-95"
+          className="absolute right-3 sm:right-6 z-40 w-10 h-10 sm:w-12 sm:h-12 rounded-full border flex items-center justify-center cursor-pointer transition-transform hover:scale-110 active:scale-95 shadow-lg bg-[var(--bg)]/90 backdrop-blur-sm"
           style={{
-            backgroundColor: "var(--bg)",
             borderColor: "var(--border-strong)",
             color: "var(--fg)"
           }}
         >
           <CaretRight size={20} weight="bold" />
         </button>
-      </div>
 
-      {/* Mobile Fallback: Natural document scrolling with clear section title */}
-      <div className="md:hidden relative z-20 w-full max-w-lg mx-auto flex flex-col gap-6 px-4">
-        <div className="mb-1">
-          <span className="text-xs font-mono tracking-widest uppercase opacity-60">
-            02 // TRAYECTORIA
+        {/* Mobile Swipe / Tap Helper Pill */}
+        <div className="md:hidden absolute bottom-5 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
+          <span className="px-3 py-1 rounded-full text-[10px] font-mono border backdrop-blur-md opacity-70 bg-[var(--bg)]/85 border-[var(--border-color)]">
+            Desliza ← → o toca una tarjeta
           </span>
-          <h2 className="text-2xl sm:text-3xl font-bold font-title mt-1">
-            Experiencia Profesional
-          </h2>
         </div>
-
-        {experiencesList.map((item, idx) => (
-          <div
-            key={idx}
-            onClick={() => setSelectedExp(item)}
-            className="rounded-2xl border p-5 flex flex-col gap-3 cursor-pointer transition-transform active:scale-[0.98]"
-            style={{
-              backgroundColor: idx % 2 === 1 ? "var(--fg)" : "var(--bg-card)",
-              color: idx % 2 === 1 ? "var(--bg)" : "var(--fg)",
-              borderColor: "var(--border-strong)"
-            }}
-          >
-            <div className="flex items-center justify-between text-xs font-mono font-bold">
-              <span>0{idx + 1}</span>
-              <span>{item.period}</span>
-            </div>
-            <h3 className="text-xl font-bold font-title">{item.role}</h3>
-            <p className="text-xs opacity-80 font-mono font-medium">{item.company}</p>
-            <p className="text-xs leading-relaxed opacity-90 line-clamp-2">
-              {item.summary || item.bullets[0]}
-            </p>
-            {item.documentImage && (
-              <div className="w-full h-32 rounded-xl overflow-hidden border p-1 bg-black/10 mt-1">
-                <img
-                  src={item.documentImage}
-                  alt={item.role}
-                  className="w-full h-full object-contain"
-                />
-              </div>
-            )}
-            <div className="pt-2 border-t flex items-center justify-between text-[11px] font-mono mt-1 opacity-75">
-              <span>{item.location}</span>
-              <span className="font-bold uppercase">Ver detalle y constancia →</span>
-            </div>
-          </div>
-        ))}
       </div>
 
       {/* Animated Fusion Modal View (Left Card: Detailed Info + Right Card: Constancia / Evidencia) */}
@@ -1032,7 +1056,7 @@ export default function Experience() {
                   {selectedExp.documentImage ? (
                     <div className="w-full flex flex-col items-center">
                       <div
-                        className="w-full max-h-[440px] rounded-2xl overflow-hidden border p-2 flex items-center justify-center shadow-xl"
+                        className="w-full max-h-[min(410px,46vh)] rounded-2xl overflow-hidden border p-2 flex items-center justify-center shadow-xl"
                         style={{
                           borderColor: "var(--border-strong)",
                           backgroundColor: "var(--bg)"
@@ -1041,7 +1065,7 @@ export default function Experience() {
                         <img
                           src={selectedExp.documentImage}
                           alt={`Constancia oficial - ${selectedExp.role}`}
-                          className="w-full max-h-[410px] object-contain rounded-xl"
+                          className="w-full max-h-[min(380px,42vh)] object-contain rounded-xl"
                         />
                       </div>
                       <div className="mt-4 flex items-center gap-3">
