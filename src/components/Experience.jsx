@@ -193,18 +193,14 @@ function drawSolid3DLetters(canvas, progress, timeSec = 0) {
   ctx.scale(dpr, dpr);
   ctx.clearRect(0, 0, width, height);
 
-  if (progress < 0.28 || progress > 0.72) {
+  if (progress <= 0.015 || progress >= 0.985) {
     ctx.restore();
     return;
   }
 
-  // Smooth fade in (0.28 -> 0.36) and fade out (0.64 -> 0.72)
   let alpha = 1;
-  if (progress < 0.36) {
-    alpha = (progress - 0.28) / 0.08;
-  } else if (progress > 0.64) {
-    alpha = (0.72 - progress) / 0.08;
-  }
+  if (progress < 0.12) alpha = (progress - 0.015) / 0.105;
+  else if (progress > 0.88) alpha = (0.985 - progress) / 0.105;
   ctx.globalAlpha = Math.max(0, Math.min(1, alpha));
 
   const isLight = document.documentElement.classList.contains("theme-light");
@@ -223,9 +219,7 @@ function drawSolid3DLetters(canvas, progress, timeSec = 0) {
   const scaleXY = 78; // Balanced size (scaled down from 108, was originally 60)
   const halfDepth = 26; // Solid, proportional 3D extrusion thickness (was 38)
 
-  // Normalized transition progress across Phase 2 [0.28, 0.72]
-  const transProgress = (progress - 0.28) / 0.44;
-  const groupY = -720 + transProgress * 1440;
+  const groupY = -680 + progress * 1360;
   const lightDir = [-0.32, -0.62, 0.71];
 
   const allPolys = [];
@@ -425,39 +419,39 @@ function CardInnerContent({ face, isBlurredBack = false }) {
       >
         <div>
           <div
-            className="flex items-center justify-between pb-4 border-b"
+            className="flex items-center justify-between pb-2.5 md:pb-4 border-b"
             style={{ borderColor: dividerColor }}
           >
-            <span className="text-xs font-mono uppercase tracking-widest font-bold">
+            <span className="text-[10px] md:text-xs font-mono uppercase tracking-widest font-bold">
               EXP // {num}
             </span>
-            <span className="text-xs font-mono flex items-center gap-1.5 font-medium">
+            <span className="text-[10px] md:text-xs font-mono flex items-center gap-1.5 font-medium">
               <CalendarBlank size={14} />
               {exp.period}
             </span>
           </div>
 
-          <div className="mt-5 flex items-end justify-between">
-            <span className="text-6xl font-black font-title leading-none tracking-tighter">
+          <div className="mt-3 md:mt-5 flex items-end justify-between">
+            <span className="text-4xl md:text-6xl font-black font-title leading-none tracking-tighter">
               {num}
             </span>
             <div
-              className="w-14 h-14 rounded-2xl border flex items-center justify-center shadow-sm"
+              className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl border flex items-center justify-center shadow-sm"
               style={{
                 borderColor: cardBorder,
                 backgroundColor: invert ? "var(--bg)" : "var(--fg)",
                 color: invert ? "var(--fg)" : "var(--bg)"
               }}
             >
-              <Icon size={28} weight="duotone" />
+              <Icon size={24} weight="duotone" />
             </div>
           </div>
 
-          <h3 className="mt-6 text-2xl font-bold font-title leading-tight">
+          <h3 className="mt-3 md:mt-6 text-base md:text-2xl font-bold font-title leading-tight">
             {exp.role}
           </h3>
           <p
-            className="mt-1.5 text-xs font-mono uppercase tracking-wider font-semibold"
+            className="mt-1 md:mt-1.5 text-[10px] md:text-xs font-mono uppercase tracking-wider font-semibold"
             style={{ color: cardMuted }}
           >
             {exp.company}
@@ -465,17 +459,17 @@ function CardInnerContent({ face, isBlurredBack = false }) {
 
           {/* Centered concise summary — clean and legible without walls of bullet points */}
           <div
-            className="mt-6 pt-5 border-t text-sm leading-relaxed"
+            className="mt-3 md:mt-6 pt-3 md:pt-5 border-t text-xs md:text-sm leading-relaxed"
             style={{ borderColor: dividerColor, color: cardMuted }}
           >
-            <p className="line-clamp-4 font-normal">
+            <p className="line-clamp-3 md:line-clamp-4 font-normal">
               {exp.summary || exp.bullets[0]}
             </p>
           </div>
         </div>
 
         <div
-          className="pt-4 border-t flex items-center justify-between text-xs font-mono"
+          className="pt-2.5 md:pt-4 border-t flex items-center justify-between text-[10px] md:text-xs font-mono"
           style={{ borderColor: dividerColor }}
         >
           <span>{exp.location}</span>
@@ -513,7 +507,7 @@ function CardInnerContent({ face, isBlurredBack = false }) {
   // Empty Card for Exp 6 (Proyectos en GitHub): "aqui no tenemos imagen asi que dejalo como vacio la tarjeta"
   return (
     <div
-      className="w-full h-full flex flex-col items-center justify-center text-center p-8 select-none"
+      className="w-full h-full flex flex-col items-center justify-center text-center p-4 md:p-8 select-none"
       style={
         isBlurredBack
           ? { filter: "blur(2.5px)", opacity: 0.65 }
@@ -521,12 +515,12 @@ function CardInnerContent({ face, isBlurredBack = false }) {
       }
     >
       <div
-        className="w-20 h-20 rounded-3xl border-2 border-dashed flex items-center justify-center opacity-30 mb-3"
+        className="w-14 h-14 md:w-20 md:h-20 rounded-2xl md:rounded-3xl border-2 border-dashed flex items-center justify-center opacity-30 mb-3"
         style={{ borderColor: cardBorder }}
       >
-        <GithubLogo size={44} weight="regular" />
+        <GithubLogo size={40} weight="regular" />
       </div>
-      <span className="text-xs font-mono uppercase tracking-widest opacity-35">
+      <span className="text-[10px] md:text-xs font-mono uppercase tracking-widest opacity-35">
         github.com/AndreeHappy
       </span>
     </div>
@@ -534,9 +528,7 @@ function CardInnerContent({ face, isBlurredBack = false }) {
 }
 
 // 3D Cylinder Ring with 6 faces (3 Experiences * 2 paired cards each)
-function CylinderRing({ faces, ringRef, innerRef, onSelectCard }) {
-  const radius = 660;
-
+function CylinderRing({ faces, ringRef, innerRef, onSelectCard, radius = 660 }) {
   return (
     <div
       ref={ringRef}
@@ -570,7 +562,7 @@ function CylinderRing({ faces, ringRef, innerRef, onSelectCard }) {
             <div
               key={idx}
               onClick={() => onSelectCard(exp)}
-              className="absolute w-[460px] h-[610px] -left-[230px] -top-[305px] cursor-pointer select-none group transition-transform duration-300 hover:scale-[1.02]"
+              className="absolute w-[250px] h-[350px] -left-[125px] -top-[175px] md:w-[460px] md:h-[610px] md:-left-[230px] md:-top-[305px] cursor-pointer select-none group transition-transform duration-300 hover:scale-[1.02]"
               style={{
                 transform: `rotateY(${angle}deg) translateZ(${radius}px)`,
                 transformStyle: "preserve-3d"
@@ -578,8 +570,8 @@ function CylinderRing({ faces, ringRef, innerRef, onSelectCard }) {
             >
               {/* Front Face */}
               <div
-                className={`absolute inset-0 rounded-[28px] border-2 overflow-hidden shadow-2xl ${
-                  isDocCard ? "p-0" : "p-8"
+                className={`absolute inset-0 rounded-[22px] md:rounded-[28px] border-2 overflow-hidden shadow-2xl ${
+                  isDocCard ? "p-0" : "p-4 md:p-8"
                 }`}
                 style={{
                   transform: "translateZ(1px)",
@@ -594,8 +586,8 @@ function CylinderRing({ faces, ringRef, innerRef, onSelectCard }) {
 
               {/* Back Face (Rotated 180° with blurred card info) */}
               <div
-                className={`absolute inset-0 rounded-[28px] border-2 overflow-hidden ${
-                  isDocCard ? "p-0" : "p-8"
+                className={`absolute inset-0 rounded-[22px] md:rounded-[28px] border-2 overflow-hidden ${
+                  isDocCard ? "p-0" : "p-4 md:p-8"
                 }`}
                 style={{
                   transform: "rotateY(180deg) translateZ(1px)",
@@ -626,35 +618,16 @@ export default function Experience() {
   const touchStartX = useRef(null);
   const touchStartY = useRef(null);
   const [selectedExp, setSelectedExp] = useState(null);
-
-  // Track viewport dimensions to gracefully adapt cylinder scale on zoom (133%, 25%) and mobile
-  const [viewport, setViewport] = useState({
-    width: typeof window !== "undefined" ? window.innerWidth : 1440,
-    height: typeof window !== "undefined" ? window.innerHeight : 900
-  });
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth < 768 : false
+  );
 
   useEffect(() => {
-    const handleResize = () => {
-      setViewport({ width: window.innerWidth, height: window.innerHeight });
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    const mq = window.matchMedia("(max-width: 767px)");
+    const onChange = (e) => setIsMobile(e.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
   }, []);
-
-  const isMobile = viewport.width < 768;
-
-  // Responsive scale:
-  // - On mobile: target front card width ~70-75% of screen width [230px, 285px]
-  // - On desktop: scale so cards never clip top/bottom on 133%+ zoom, nor get lost at 25% zoom
-  const scale = isMobile
-    ? Math.min(Math.max(viewport.width * 0.72, 230), 285) / 460
-    : Math.min(
-        Math.max(
-          Math.min((viewport.height * 0.63) / 610, (viewport.width * 0.72) / 1380),
-          0.62
-        ),
-        1.35
-      );
 
   useEffect(() => {
     if (!selectedExp) return;
@@ -682,23 +655,21 @@ export default function Experience() {
 
       mm.add("(min-width: 0px)", () => {
         const isMobileScreen = window.innerWidth < 768;
-        const scrollDist = isMobileScreen ? "+=2400" : "+=3600";
-        const travelDistance = 2600;
+        const scrollDist = isMobileScreen ? "+=2600" : "+=3600";
+        const travelY = 1350;
 
         gsap.set(r1, {
           y: 0,
           z: 0,
           rotationX: 0,
-          rotationY: 0,
-          autoAlpha: 1
+          rotationY: 0
         });
 
         gsap.set(r2, {
-          y: travelDistance,
+          y: travelY,
           z: 0,
           rotationX: 0,
-          rotationY: 120,
-          autoAlpha: 0
+          rotationY: 120
         });
 
         let targetProgress = 0;
@@ -748,7 +719,7 @@ export default function Experience() {
           }
         });
 
-        // PHASE 1 (0 -> 1.2): Ring 1 rotates clockwise in place
+        // PHASE 1 (0 -> 1.2): Ring 1 rotates clockwise
         tl.to(
           r1,
           {
@@ -759,13 +730,12 @@ export default function Experience() {
           0
         );
 
-        // PHASE 2 (1.2 -> 2.4): Ring 1 rises up & fades out, Ring 2 rises from below & fades in
+        // PHASE 2 (1.2 -> 2.4): Ring 1 rises up, solid 3D "A A S A" letters tumble through the center, Ring 2 rises from below
         tl.to(
           r1,
           {
-            y: -travelDistance,
+            y: -travelY,
             rotationY: -300,
-            autoAlpha: 0,
             ease: "none",
             duration: 1.2
           },
@@ -777,14 +747,13 @@ export default function Experience() {
           {
             y: 0,
             rotationY: 0,
-            autoAlpha: 1,
             ease: "none",
             duration: 1.2
           },
           1.2
         );
 
-        // PHASE 3 (2.4 -> 3.6): Ring 2 rotates clockwise in place
+        // PHASE 3 (2.4 -> 3.6): Ring 2 rotates clockwise in center
         tl.to(
           r2,
           {
@@ -836,11 +805,13 @@ export default function Experience() {
     touchStartY.current = null;
   };
 
+  const ringRadius = isMobile ? 310 : 660;
+
   return (
     <section
       id="experiencia"
       ref={sectionRef}
-      className="relative w-full h-[100dvh] border-t overflow-hidden flex items-center justify-center"
+      className="relative w-full h-screen border-t overflow-hidden flex items-center justify-center"
       style={{
         backgroundColor: "var(--bg)",
         borderColor: "var(--border-color)",
@@ -859,21 +830,21 @@ export default function Experience() {
         }}
       />
 
-      {/* Unified Responsive 3D Scene (Desktop, Mobile & Zoom) */}
+      {/* Unified 3D Scene (Pure preserve-3d without scale3d or opacity flattening) */}
       <div
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
-        className="relative w-full h-full flex items-center justify-center overflow-hidden touch-pan-y"
+        className="relative w-full h-full flex items-center justify-center touch-pan-y"
         style={{
-          perspective: `${Math.round(isMobile ? 1250 : 2400 * Math.max(scale, 0.7))}px`,
+          perspective: isMobile ? "1400px" : "2400px",
           perspectiveOrigin: "50% 50%"
         }}
       >
         <div
-          className="relative w-0 h-0 will-change-transform"
+          className="relative w-0 h-0"
           style={{
             transformStyle: "preserve-3d",
-            transform: `scale3d(${scale}, ${scale}, ${scale}) translateZ(${isMobile ? -260 : -420}px)`
+            transform: isMobile ? "translateZ(-220px)" : "translateZ(-420px)"
           }}
         >
           {/* Ring 1 (Experiences 1, 2, 3: Text + Image pairs) */}
@@ -882,12 +853,13 @@ export default function Experience() {
             ringRef={ring1Ref}
             innerRef={ring1InnerRef}
             onSelectCard={setSelectedExp}
+            radius={ringRadius}
           />
 
           {/* Solid Watertight 3D Extruded "A A S A" Letters at Z=0 (Center of the Cylinder Tube) */}
           <canvas
             ref={canvas3DRef}
-            className="pointer-events-none absolute w-[1000px] h-[1000px] -left-[500px] -top-[500px]"
+            className="pointer-events-none absolute w-[560px] h-[560px] -left-[280px] -top-[280px] md:w-[1000px] md:h-[1000px] md:-left-[500px] md:-top-[500px]"
             style={{
               transform: "translateZ(0px)"
             }}
@@ -899,6 +871,7 @@ export default function Experience() {
             ringRef={ring2Ref}
             innerRef={ring2InnerRef}
             onSelectCard={setSelectedExp}
+            radius={ringRadius}
           />
         </div>
 
@@ -906,8 +879,9 @@ export default function Experience() {
         <button
           onClick={() => rotateCylinderHorizontally(-1)}
           aria-label="Girar cilindro a la izquierda"
-          className="absolute left-3 sm:left-6 z-40 w-10 h-10 sm:w-12 sm:h-12 rounded-full border flex items-center justify-center cursor-pointer transition-transform hover:scale-110 active:scale-95 shadow-lg bg-[var(--bg)]/90 backdrop-blur-sm"
+          className="absolute left-3 md:left-6 z-40 w-10 h-10 md:w-12 md:h-12 rounded-full border flex items-center justify-center cursor-pointer transition-transform hover:scale-110 active:scale-95"
           style={{
+            backgroundColor: "var(--bg)",
             borderColor: "var(--border-strong)",
             color: "var(--fg)"
           }}
@@ -918,8 +892,9 @@ export default function Experience() {
         <button
           onClick={() => rotateCylinderHorizontally(1)}
           aria-label="Girar cilindro a la derecha"
-          className="absolute right-3 sm:right-6 z-40 w-10 h-10 sm:w-12 sm:h-12 rounded-full border flex items-center justify-center cursor-pointer transition-transform hover:scale-110 active:scale-95 shadow-lg bg-[var(--bg)]/90 backdrop-blur-sm"
+          className="absolute right-3 md:right-6 z-40 w-10 h-10 md:w-12 md:h-12 rounded-full border flex items-center justify-center cursor-pointer transition-transform hover:scale-110 active:scale-95"
           style={{
+            backgroundColor: "var(--bg)",
             borderColor: "var(--border-strong)",
             color: "var(--fg)"
           }}
